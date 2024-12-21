@@ -1,39 +1,48 @@
-# import pycuda.autoinit
+# Sample source code from the Tutorial Introduction in the documentation.
 import pycuda.driver as cuda
-import numpy
-
-
+import pycuda.autoinit  # noqa
 from pycuda.compiler import SourceModule
-# export PATH=/usr/local/cuda/bin:$PATH
-
-
-cuda.init()     
-
-
-def dott(array_a, array_b):
-    #ctx.push()
-    mod = SourceModule("""
-    __global__ void dot(float *dest, float *a, float *b)
+ 
+import numpy
+a = numpy.random.randn(4, 4)
+ 
+a = a.astype(numpy.float32)
+ 
+a_gpu = cuda.mem_alloc(a.size * a.dtype.itemsize)
+ 
+cuda.memcpy_htod(a_gpu, a)
+ 
+mod = SourceModule("""
+    __global__ void doublify(float *a)
     {
-    const int i = threadIdx.x;
-    dest[i] = a[i] * b[i];
+      int idx = threadIdx.x + threadIdx.y*4;
+      a[idx] *= 2;
     }
     """)
-    dot = mod.get_function("dot")
-
-    dest = numpy.zeros_like(array_a)
-    dot(cuda.Out(dest), cuda.In(array_a), cuda.In(array_b),block=(len(a),1,1), grid=(1,1))
-    # 
-    return dest
-
-
-
-if __name__ == "__main__":
-    a = numpy.random.normal(size=40).astype(numpy.float32)
-    b = numpy.random.normal(size=40).astype(numpy.float32)
-    ctx  = cuda.Device(0).make_context()
-    print(dott(a, b))
-    ctx.pop()
-    # del ctx
-
-
+ 
+func = mod.get_function("doublify")
+func(a_gpu, block=(4, 4, 1), grid=(1, 1), shared=0)
+ 
+a_doubled = numpy.empty_like(a)
+cuda.memcpy_dtoh(a_doubled, a_gpu)
+print("original array:")
+print(a)
+print("doubled with kernel:")
+print(a_doubled)
+ 
+# alternate kernel invocation -------------------------------------------------
+ 
+func(cuda.InOut(a), block=(4, 4, 1))
+print("doubled with InOut:")
+print(a)
+ 
+# part 2 ----------------------------------------------------------------------
+ 
+import pycuda.gpuarray as gpuarray
+a_gpu = gpuarray.to_gpu(numpy.random.randn(4, 4).astype(numpy.float32))
+a_doubled = (2*a_gpu).get()
+ 
+print("original array:")
+print(a_gpu)
+print("doubled with gpuarray:")
+print(a_doubled)

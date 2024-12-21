@@ -28,12 +28,13 @@ detector2 = Detector2(engine_file_path2)
 detector3 = Detector3(engine_file_path2)
 
 
-sets_ordinary = ['phantom09', 'phantom10', 'phantom30', 'phantom47', 'phantom70']
-sets_complex = ['phantom05', 'phantom08', 'phantom58', 'phantom65', 'phantom86']
-sets_small = ['phantom19', 'phantom41', 'phantom43', 'phantom46', 'phantom63']
+# sets_ordinary = ['phantom09', 'phantom10', 'phantom30', 'phantom47', 'phantom70']
+# sets_complex = ['phantom05', 'phantom08', 'phantom58', 'phantom65', 'phantom86']
+# sets_small = ['phantom19', 'phantom41', 'phantom43', 'phantom46', 'phantom63']
+# my_set = ['henan1','henan2','henan3','henan4']
 
-video_name = 'phantom09'
-cap = cv2.VideoCapture('/home/user-guo/data/ARD-MAV/videos/' + video_name + '.mp4')
+video_name = 'henan2'
+cap = cv2.VideoCapture('/workspace/Global-Local-MAV-Detection/videos/' + video_name + '.mp4')
 
 count = 0
 flag = 0
