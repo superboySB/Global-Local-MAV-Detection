@@ -30,7 +30,7 @@ class Detector1:
         self.stride = 1
 
         # Create a Context on this device,
-        self.cfx = cuda.Device(1).make_context()
+        self.cfx = cuda.Device(0).make_context()
         stream = cuda.Stream()
         TRT_LOGGER = trt.Logger(trt.Logger.ERROR)
         runtime = trt.Runtime(TRT_LOGGER)
