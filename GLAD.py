@@ -21,9 +21,10 @@ detector1 = Detector1(engine_file_path1)
 detector2 = Detector2(engine_file_path2)
 detector3 = Detector3(engine_file_path2)
 
-# my_set = ['henan1','henan2','henan3','henan4']
+# my_set = ['henan1','henan2','henan3','henan4', 'bird1'] , a=300
+# my_set = ['fpv1', 'fpv2', 'fpv3', 'fpv4'] , a=200
 
-video_name = 'bird1'
+video_name = 'fpv4'
 video_path = '/workspace/Global-Local-MAV-Detection/videos/' + video_name + '.mp4'
 cap = cv2.VideoCapture(video_path)
 
@@ -58,7 +59,7 @@ count = 0
 flag = 0
 prveframe = None
 local_num = 0
-a = 300
+a = 200
 
 x2 = 0
 y2 = 0

@@ -46,12 +46,8 @@ ffmpeg -i xxx.mp4 -pix_fmt yuv420p -c:v libx264 -crf 18 -preset slow -c:a copy o
 ```
 ## 素材
 - 【喜鹊战无人机-哔哩哔哩】 https://b23.tv/rJiGH7B
-- 【大疆mini无人机装灯泡，犹如空间站的对接的操作-哔哩哔哩】 https://b23.tv/UEmFWZX
 - 【周末的校园里两架穿越机追逐  也算是实现了曾经的一个小愿望了-哔哩哔哩】 https://b23.tv/SJounAP
-- 【双机位  FPV追逐飞行-哔哩哔哩】 https://b23.tv/03avhJX
 - 【Flylens75追逐speedybee25-哔哩哔哩】 https://b23.tv/3NOeJlY
-- 【无人机追逐全速 FPV 无人机 ☠️🚀🚀☣️☢️-哔哩哔哩】 https://b23.tv/5EfEpEF
-- 【无人机废旧工厂上演追逐大戏-哔哩哔哩】 https://b23.tv/HkkhqDo
 - 【【穿越机灵感与启发 No.58】3寸涵道穿越机的追逐乐趣 GoPro拍摄-哔哩哔哩】 https://b23.tv/zgy8ppr
 - 【追逐五寸-哔哩哔哩】 https://b23.tv/ICGgi1A
 - 【超低空飞行和追逐穿越机-哔哩哔哩】 https://b23.tv/7a6YrTk
