@@ -16,7 +16,7 @@ docker exec -it antiuav-test /bin/bash
 cd /workspace
 git clone https://github.com/superboySB/Global-Local-MAV-Detection
 ```
-模型量化
+模型量化（需要在docker内根据物理机定制）
 ```sh
 cp /workspace/Global-Local-MAV-Detection/weights/*.pt /workspace/tensorrtx/yolov5/gen_wts.py /workspace/yolov5/
 cd /workspace/yolov5/
@@ -32,7 +32,7 @@ cp /workspace/yolov5/*.wts /workspace/tensorrtx/yolov5/build/
 ./yolov5 -s yolov5s_GLAD-crop.wts yolov5s_GLAD-crop.engine s
 cp *.engine libmyplugins.so /workspace/Global-Local-MAV-Detection/weights/
 ```
-运行
+运行demo
 ```sh
 cd /workspace/Global-Local-MAV-Detection
 python GLAD.py
