@@ -1,13 +1,7 @@
-"""
-Created on 2023/1/1
-@Author: Guo Hanqing
-@Email : guohanqing@westlake.edu.cn
-@File : GLAD.py
-"""
-
 import cv2
 import numpy as np
 import time
+import os
 
 from detector1_trt import Detector1
 from detector2_trt import Detector2
@@ -27,20 +21,44 @@ detector1 = Detector1(engine_file_path1)
 detector2 = Detector2(engine_file_path2)
 detector3 = Detector3(engine_file_path2)
 
-
-# sets_ordinary = ['phantom09', 'phantom10', 'phantom30', 'phantom47', 'phantom70']
-# sets_complex = ['phantom05', 'phantom08', 'phantom58', 'phantom65', 'phantom86']
-# sets_small = ['phantom19', 'phantom41', 'phantom43', 'phantom46', 'phantom63']
 # my_set = ['henan1','henan2','henan3','henan4']
 
-video_name = 'henan2'
-cap = cv2.VideoCapture('/workspace/Global-Local-MAV-Detection/videos/' + video_name + '.mp4')
+video_name = 'bird1'
+video_path = '/workspace/Global-Local-MAV-Detection/videos/' + video_name + '.mp4'
+cap = cv2.VideoCapture(video_path)
+
+# 检查视频是否成功打开
+if not cap.isOpened():
+    print(f"无法打开视频文件: {video_path}")
+    exit()
+
+# 获取视频的帧率和帧尺寸，以便初始化VideoWriter
+fps_input = cap.get(cv2.CAP_PROP_FPS)
+width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+
+# 确保输出目录存在
+output_dir = '/workspace/Global-Local-MAV-Detection/videos/'
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
+
+# 定义输出视频的编码器和创建VideoWriter对象
+# 使用 'mp4v' 编码器适用于 .mp4 文件
+fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+output_video_path = f'{output_dir}{video_name}_result.mp4'
+out = cv2.VideoWriter(output_video_path, fourcc, fps_input, (width, height))
+
+# 检查VideoWriter是否成功初始化
+if not out.isOpened():
+    print(f"无法打开视频写入对象: {output_video_path}")
+    cap.release()
+    exit()
 
 count = 0
 flag = 0
 prveframe = None
 local_num = 0
-a = 160
+a = 300
 
 x2 = 0
 y2 = 0
@@ -51,10 +69,9 @@ border = 1
 border1 = 1
 output_boxes = []
 
-
 while cap.isOpened():
     ret, frame = cap.read()
-    count = count + 1
+    count += 1
     if not ret:
         break
     # frame = cv2.resize(frame, (1920, 1080), dst=None, interpolation=cv2.INTER_CUBIC)
@@ -182,7 +199,7 @@ while cap.isOpened():
                 cv2.putText(frame_show, "Local YOLO and MOD Failed", (500, 100), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 2)
                 init_rect = []
                 status = 'Local Both Failure'
-                local_num = local_num + 1
+                local_num += 1
         else:
             (x2, y2) = (boxes[0], boxes[1])
             (w2, h2) = (boxes[2], boxes[3])
@@ -211,6 +228,10 @@ while cap.isOpened():
     # cv2.putText(frame_show, box_status, (50, 150), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 2)
     color2 = (0, 0, 255)
     cv2.imshow('Detection', frame_show)
+
+    # 将当前帧写入输出视频
+    out.write(frame_show)  # 新增行
+
     # cv2.imwrite('./output/' + video_name + '/' + str(count) + '.jpg', frame_show)
     print('frame count: %d fps: %.2f' % (count, fps), end=' ')
     print(status, end=' ')
@@ -225,7 +246,8 @@ while cap.isOpened():
 # bbox_file = './output/' + video_name + '.txt'
 # np.savetxt(bbox_file, tracked_bb, delimiter='\t', fmt='%d')
 cap.release()
+
+# 释放VideoWriter对象
+out.release()  # 新增行
+
 cv2.destroyAllWindows()
-
-
-

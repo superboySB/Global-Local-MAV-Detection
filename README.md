@@ -39,8 +39,12 @@ cd /workspace/Global-Local-MAV-Detection
 python GLAD.py
 ```
 
+## TroubleShooting
+转吗
+```sh
+ffmpeg -i xxx.mp4 -pix_fmt yuv420p -c:v libx264 -crf 18 -preset slow -c:a copy output_8bit.mp4
+```
 ## 素材
-- 【大疆运载无人机“除冰”，凌空一击，酷！-哔哩哔哩】 https://b23.tv/OmDTmAX
 - 【喜鹊战无人机-哔哩哔哩】 https://b23.tv/rJiGH7B
 - 【大疆mini无人机装灯泡，犹如空间站的对接的操作-哔哩哔哩】 https://b23.tv/UEmFWZX
 - 【周末的校园里两架穿越机追逐  也算是实现了曾经的一个小愿望了-哔哩哔哩】 https://b23.tv/SJounAP
