@@ -148,7 +148,7 @@ def imgproc(data, out_video_writer=None, save_frame=True):
     bbx = None
 
     frame = np.array(data)
-    print('frame.shape=', frame.shape)
+    print('frame.shape=', frame.shape)  # 打印帧尺寸
     # cv2.imshow("visual", frame)
     # cv2.waitKey(1)
     # pdb.set_trace()
@@ -161,6 +161,20 @@ def imgproc(data, out_video_writer=None, save_frame=True):
     IMG_TYPE = 1
 
     processed_frame = frame.copy()  # 复制一份用于保存
+
+    # 确保 processed_frame 的尺寸与 VideoWriter 一致
+    expected_shape = (height, width, 3)  # 需要全局变量 height 和 width
+    if processed_frame.shape[:2] != (height, width):
+        print(f"警告: 处理后的帧尺寸 {processed_frame.shape[:2]} 与预期尺寸 {(height, width)} 不一致，进行调整")
+        processed_frame = cv2.resize(processed_frame, (width, height))
+
+    # 检查数据类型和通道数
+    if processed_frame.dtype != np.uint8:
+        print(f"警告: 图像数据类型为 {processed_frame.dtype}, 转换为 uint8")
+        processed_frame = processed_frame.astype(np.uint8)
+    if len(processed_frame.shape) != 3 or processed_frame.shape[2] != 3:
+        print(f"警告: 图像通道数为 {processed_frame.shape[2] if len(processed_frame.shape) > 2 else '单通道'}, 转换为3通道")
+        processed_frame = cv2.cvtColor(processed_frame, cv2.COLOR_GRAY2BGR)
 
     if g_detector and g_tracker:
         # g_frame_counter = 0
@@ -272,8 +286,10 @@ def imgproc(data, out_video_writer=None, save_frame=True):
                               (0, 255, 0), 2)
 
     # 保存处理后的帧
-                if save_frame and out_video_writer is not None:
-                    out_video_writer.write(processed_frame)
+        if save_frame and out_video_writer is not None:
+            print(f"写入帧: shape={processed_frame.shape}, dtype={processed_frame.dtype}")
+            out_video_writer.write(processed_frame)
+            print("帧已写入")
 
 def getUDPSocket(IpAddr, Port):
     server = socket.socket(type=socket.SOCK_DGRAM)
@@ -329,7 +345,7 @@ if __name__ == "__main__":
         os.makedirs(result_dir)
 
     # 获取输入视频路径
-    video_path = os.path.join(os.path.dirname(__file__), 'videos/n9.mp4')
+    video_path = os.path.join(os.path.dirname(__file__), 'videos/fpv3.mp4')
     cap = cv2.VideoCapture(video_path)
 
     if not cap.isOpened():
@@ -340,7 +356,9 @@ if __name__ == "__main__":
     fps = cap.get(cv2.CAP_PROP_FPS)
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-    fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # 使用mp4编码
+    fourcc = cv2.VideoWriter_fourcc(*'XVID')  # 尝试使用 'XVID' 编码器
+
+    print(f"视频分辨率: {width}x{height}, FPS: {fps}")
 
     # 构造输出视频的路径
     video_filename = os.path.basename(video_path)
@@ -353,7 +371,6 @@ if __name__ == "__main__":
     if not out_video_writer.isOpened():
         print("无法初始化视频写入器")
         sys.exit()
-
     print(f"结果视频将保存为: {output_video_path}")
 
     while True:
