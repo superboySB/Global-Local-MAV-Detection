@@ -17,6 +17,20 @@ docker exec -it antiuav-test /bin/bash
 cd /workspace
 git clone https://github.com/superboySB/Global-Local-MAV-Detection
 ```
+
+## AntiUAV（big）
+解压模型
+```sh
+cd Global-Local-MAV-Detection
+cat detect_wrapper/weights/weights.zip.* > detect_wrapper/weights/weights.zip
+unzip detect_wrapper/weights/weights.zip -d detect_wrapper
+```
+运行demo
+```sh
+python demo_AntiUAV.py
+```
+
+## GLAD（small）
 模型量化（需要在docker内根据物理机定制）
 ```sh
 cp /workspace/Global-Local-MAV-Detection/weights/*.pt /workspace/tensorrtx/yolov5/gen_wts.py /workspace/yolov5/
@@ -36,14 +50,15 @@ cp *.engine libmyplugins.so /workspace/Global-Local-MAV-Detection/weights/
 运行demo
 ```sh
 cd /workspace/Global-Local-MAV-Detection
-python GLAD.py
+python demo_GLAD.py
 ```
 
 ## TroubleShooting
-转吗
+手机HDR视频转码
 ```sh
 ffmpeg -i xxx.mp4 -pix_fmt yuv420p -c:v libx264 -crf 18 -preset slow -c:a copy output_8bit.mp4
 ```
+
 ## 素材
 - 【喜鹊战无人机-哔哩哔哩】 https://b23.tv/rJiGH7B
 - 【周末的校园里两架穿越机追逐  也算是实现了曾经的一个小愿望了-哔哩哔哩】 https://b23.tv/SJounAP

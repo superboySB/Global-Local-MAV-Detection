@@ -1,3 +1,6 @@
 __pycache__/
 weights/*.engine
 weights/*.so
+detect_wrapper/weights/weights.zip
+detect_wrapper/weights/best.pt
+log.txt
