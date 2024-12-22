@@ -187,6 +187,7 @@ def frame_stablize(frame1, frame2):
     homography_matrix, status = cv2.findHomography(points_new, points_old, cv2.RANSAC, 3.0)
     img_compensate = cv2.warpPerspective(frame2, homography_matrix, (width, height), flags=cv2.INTER_LINEAR + cv2.WARP_INVERSE_MAP)
     homo_inv = np.linalg.inv(homography_matrix)
+    
     # # 使用仿射变换矩阵进行图像稳像
     # # Find affine transformation matrix
     # m, _ = cv2.estimateAffinePartial2D(points_new, points_old, maxIters=200, ransacReprojThreshold=3)
@@ -417,26 +418,6 @@ def box_select(boxes1):
                             boxes1[bi] = np.zeros(4)
 
     return boxes1
-
-
-class Net(nn.Module):
-    def __init__(self):
-        super(Net, self).__init__()
-        self.conv1 = nn.Conv2d(3, 6, 5)
-        self.pool = nn.MaxPool2d(2, 2)
-        self.conv2 = nn.Conv2d(6, 16, 5)
-        self.fc1 = nn.Linear(16 * 5 * 5, 120)
-        self.fc2 = nn.Linear(120, 84)
-        self.fc3 = nn.Linear(84, 2)
-
-    def forward(self, x):
-        x = self.pool(F.relu(self.conv1(x)))
-        x = self.pool(F.relu(self.conv2(x)))
-        x = x.view(-1, 16 * 5 * 5)
-        x = F.relu(self.fc1(x))
-        x = F.relu(self.fc2(x))
-        x = self.fc3(x)
-        return x
 
 
 class MyNet(nn.Module):

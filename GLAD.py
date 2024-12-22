@@ -24,7 +24,7 @@ detector3 = Detector3(engine_file_path2)
 # my_set = ['henan1','henan2','henan3','henan4', 'bird1'] , a=300
 # my_set = ['fpv1', 'fpv2', 'fpv3', 'fpv4'] , a=200
 
-video_name = 'fpv4'
+video_name = 'henan4'
 video_path = '/workspace/Global-Local-MAV-Detection/videos/' + video_name + '.mp4'
 cap = cv2.VideoCapture(video_path)
 
@@ -39,7 +39,7 @@ width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
 height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
 # 确保输出目录存在
-output_dir = '/workspace/Global-Local-MAV-Detection/videos/'
+output_dir = '/workspace/Global-Local-MAV-Detection/results_glad/'
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
 
@@ -59,7 +59,7 @@ count = 0
 flag = 0
 prveframe = None
 local_num = 0
-a = 200
+a = 300
 
 x2 = 0
 y2 = 0

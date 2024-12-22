@@ -17,7 +17,7 @@ RUN apt-get install -y --no-install-recommends \
     libxkbcommon-x11-0 libqt5gui5 libqt5core5a libqt5widgets5 libxcb-xinerama0 libopencv-dev ffmpeg
 RUN /usr/bin/python -m pip install --upgrade pip
 RUN pip install torch==1.8.1+cu111 torchvision==0.9.1+cu111 torchaudio==0.8.1 -f https://download.pytorch.org/whl/torch_stable.html
-RUN pip install numpy pandas requests pyyaml tqdm matplotlib seaborn opencv-python==4.4.0.46
+RUN pip install numpy numba pandas requests pyyaml tqdm matplotlib seaborn opencv-python==4.4.0.46
 
 WORKDIR /workspace
 RUN git clone -b v6.0 https://github.com/ultralytics/yolov5.git && \
